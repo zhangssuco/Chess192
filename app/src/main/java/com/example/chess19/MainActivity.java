@@ -28,7 +28,12 @@ public class MainActivity extends AppCompatActivity {
 
             public void onClick(View v){
                 playsound(R.raw.hawking01);
+
                 db.reset(Integer.parseInt(t1.getText().toString()));
+                db.cs.clear();
+                db.invalidate();
+
+
             }
         });
 
