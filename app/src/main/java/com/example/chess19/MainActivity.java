@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -14,11 +15,15 @@ import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
 
+    MediaPlayer soundclicked=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         setContentView(R.layout.activity_main);
+        soundclicked= MediaPlayer.create(this, R.raw.clicked);
 
         final EditText t1=(EditText)findViewById(R.id.editText);
         final drawingboard db=(drawingboard)findViewById(R.id.board);
@@ -27,10 +32,13 @@ public class MainActivity extends AppCompatActivity {
         b.setOnClickListener(new View.OnClickListener(){
 
             public void onClick(View v){
-                playsound(R.raw.hawking01);
 
-                db.reset(Integer.parseInt(t1.getText().toString()));
-                db.cs.clear();
+                //playsound(R.raw.hawking01);
+                //db.reset(Integer.parseInt(t1.getText().toString()));
+                //db.cs.clear();
+
+                db.cb.reset();
+
                 db.invalidate();
 
 
@@ -43,13 +51,15 @@ public class MainActivity extends AppCompatActivity {
             public void onEventOccurred(Point p) {
 
                 // TODO Auto-generated method stub
-                    t1.setText(String.valueOf(p.x)+String.valueOf(p.y));
+                    t1.setText("You clicked the chess board at position of X: " +String.valueOf(p.x)+" pixels, Y: "+String.valueOf(p.y)+"pixels");
+                    soundclicked.start();
 
             }
         });
 
 
     }
+
 
     void playsound(int id)
     {
@@ -62,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
     public void showrule(View view)
     {
         Intent browsing=new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.chess.com/"));
-
         startActivity(browsing);
     }
 

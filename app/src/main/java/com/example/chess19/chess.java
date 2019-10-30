@@ -20,33 +20,37 @@ class chess {
     char DARKKING = 'K';
 
     public chess() {
-        step=0;
         game = new char[8][8];
-
-        game[7][0] = game[7][7] = LIGHTROOK;  //'r';
-        game[0][0] = game[0][7] = DARKROOK; //'R'
-
-        game[7][2] = game[7][5] = LIGHTBISHOP;  //'r';
-        game[7][4] = LIGHTKING;  //'r';
-        //!!! Expand this part
-        // you need to do fill in  blank
-
-        game[7][3] = LIGHTQUEEN;
-        game[0][3] = DARKQUEEN;
-        game[0][4] = DARKKING;
-
-        for (int c = 0; c < 8; c++) {
-            game[6][c] = LIGHTPAWN;
-            // you need to figure out how to initialize dark PAWN
-        }
-
-        for (int r = 2; r <= 5; r++)
-            for (int c = 0; c < 8; c++)
-                game[r][c] = EMPTY;
+        reset();
 
     }
 
+    void reset()
+    {
+    step=0;
+    game[7][0] = game[7][7] = LIGHTROOK;  //'r';
+    game[0][0] = game[0][7] = DARKROOK; //'R'
 
+    game[7][2] = game[7][5] = LIGHTBISHOP;  //'r';
+    game[7][4] = LIGHTKING;  //'r';
+    //!!! Expand this part
+    // you need to do fill in  blank
+
+    game[7][3] = LIGHTQUEEN;
+    game[0][3] = DARKQUEEN;
+    game[0][4] = DARKKING;
+
+    for (int c = 0; c < 8; c++) {
+        game[6][c] = LIGHTPAWN;
+        // you need to figure out how to initialize dark PAWN
+    }
+
+    for (int r = 2; r <= 5; r++)
+        for (int c = 0; c < 8; c++)
+            game[r][c] = EMPTY;
+
+
+    }
     void display()
     {
         for (int r = 0; r <8; r++)

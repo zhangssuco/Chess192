@@ -7,6 +7,7 @@ import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.view.MotionEvent;
 import android.view.View;
 import android.content.Context;
@@ -78,9 +79,8 @@ public class drawingboard extends View {
                 Toast.makeText(c,String.valueOf(px) +","+String.valueOf(py),Toast.LENGTH_SHORT).show();
 
                 //We need to have two clicks to
-
                 int whichcol=pxtocol(px);
-                int whichrow=pxtocol(py); // you need to apply the above logic to this statement.
+                int whichrow=pytorow(py); // you need to apply the above logic to this statement.
 
                 if (waitforsource)
                 {
@@ -99,10 +99,15 @@ public class drawingboard extends View {
                     invalidate(); //
                 }
 
-                cs.add(p);
+                //cs.add(p);
 
                 if (mEventListener != null) {
+
+                   // final MediaPlayer mp = MediaPlayer.create(getContext(), R.raw.clicked);
+                   // mp.start();
+
                     mEventListener.onEventOccurred(p);
+
                 }
 
                 //updateIndex(createPath(event));
@@ -219,7 +224,7 @@ public class drawingboard extends View {
 
     }
 
-    int margin=10;
+    int margin=20;
     int gridheight=10;
     int gridwidth=10;
 
@@ -232,18 +237,21 @@ public class drawingboard extends View {
         gridwidth = (this.getMeasuredWidth()-2*margin)/8;
         gridheight = (this.getMeasuredHeight()-2*margin)/8;
 
+        // drawboard, checkers
+        for(int row=0; row<8; row++) {
+            for(int col=0; col<8; col++) {
+                //!!!! uncomment out below statements to see what happen
+                //if ((row+col)%2==1)
+                    //canvas.drawRect(margin+gridwidth*col+2, gridheight * row + margin+2, margin+gridwidth*col+gridwidth-2, gridheight * row + margin+gridheight-2, new Paint(Color.GREEN));
+            }
+        }
+
         //drawboard draw lines (optional)
         for(int row=0; row<9; row++) {
             canvas.drawLine(margin, gridheight * row + margin, margin+gridwidth*8, gridheight * row + margin, new Paint(Color.RED));
             canvas.drawLine(margin+gridwidth*row, margin, margin+gridwidth*row, margin+gridheight*8, new Paint(Color.RED));
         }
-        // drawboard, checkers
-        for(int row=0; row<8; row++) {
-            for(int col=0; col<8; col++) {
-                if ((row+col)%2==1)
-                    canvas.drawRect(margin+gridwidth*col, gridheight * row + margin, margin+gridwidth*col+gridwidth, gridheight * row + margin+gridheight, new Paint(Color.GREEN));
-            }
-        }
+
         //draw game
         updategamevisualization(canvas);
 
