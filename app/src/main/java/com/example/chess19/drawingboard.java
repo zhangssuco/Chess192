@@ -20,16 +20,16 @@ import java.util.ArrayList;
 
 public class drawingboard extends View {
 
-    private int pathIndex = 0;
+/*    private int pathIndex = 0;
+
     private ArrayList<Path> pathLists = new ArrayList<>();
     private ArrayList<Paint> paintLists = new ArrayList<>();
+
     private float startX = 0F;
     private float startY = 0F;
-
+*/
     ArrayList<Point> cs;
-
     Paint paintp;
-
     Context c;
 
     public drawingboard(Context context, AttributeSet attrs){
@@ -38,8 +38,6 @@ public class drawingboard extends View {
         super(context, attrs);
 
         c=context;
-
-        //cb=new chessgame();
         cb=new chess();
 
 
@@ -56,13 +54,50 @@ public class drawingboard extends View {
     }
 
 
+    boolean     waitforsource=true;
+    int srow, scol, drow, dcol;
+
+    int pxtocol(int px)
+    {
+        return (px-margin)/gridwidth;
+    }
+    int pytorow(int py)
+    {
+        return (py-margin)/gridheight;
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 Toast.makeText(c,"clicked",Toast.LENGTH_SHORT).show();
-                Point p=new Point( (int)event.getX(), (int)event.getY());
-                Toast.makeText(c,String.valueOf((int)event.getX()) +","+String.valueOf((int)event.getY()),Toast.LENGTH_SHORT).show();
+                int px=(int)event.getX();
+                int py=(int)event.getY();
+                Point p=new Point( px, py);
+
+                Toast.makeText(c,String.valueOf(px) +","+String.valueOf(py),Toast.LENGTH_SHORT).show();
+
+                //We need to have two clicks to
+
+                int whichcol=pxtocol(px);
+                int whichrow=pxtocol(py); // you need to apply the above logic to this statement.
+
+                if (waitforsource)
+                {
+                    srow=whichrow;
+                    scol=whichcol;
+                    waitforsource=false;
+                }
+                else
+                {
+                    drow=whichrow;
+                    dcol=whichcol;
+                    cb.makeamove(srow, scol, drow, dcol);
+                    waitforsource=true;  //after second click, waiting for first click
+
+                    //revalidate();
+                    invalidate(); //
+                }
 
                 cs.add(p);
 
@@ -77,33 +112,23 @@ public class drawingboard extends View {
                 break;
 
             case MotionEvent.ACTION_MOVE:
-/*
-                float x = event.getX();
-                float y = event.getY();
-                Path path = pathLists.get(pathIndex - 1);;
-                path.lineTo(x, y);
-*/
                 break;
             default:
                 break;
         }
-        // Invalidate the whole view. If the view is visible.
         invalidate();
         return true;
     }
 
     int row;
-    //chessgame cb;
-    chess cb;
+   chess cb;
 
     void reset(int row)
     {
 
         Toast.makeText(c,"in reset",Toast.LENGTH_SHORT).show();
 
-        //cb.side=row;
-
-        invalidate();
+       invalidate();
 
     }
 
@@ -118,6 +143,7 @@ public class drawingboard extends View {
     {
         canvas.drawColor(Color.GREEN);//whatever color you want, make sure it's not the same as your image
         //draw the View
+
         Toast.makeText(c,"repaint",Toast.LENGTH_SHORT).show();
         canvas.drawColor(Color.YELLOW);
         canvas.drawText(String.valueOf(cb.step), 20,20,new Paint(Color.RED));
@@ -247,9 +273,6 @@ public class drawingboard extends View {
         {
             System.out.println(e.toString());
         }
-
-
-
     }
 
 
